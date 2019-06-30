@@ -1,6 +1,6 @@
 {
   "name": "talisker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "author": "Stepan Skovajsa",
   "email": "skovajsa.s@gmail.com",
@@ -9,7 +9,7 @@
     "start": "nodemon ./lib/index.js --watch src"
   },
   "bin": {
-    "probe": "./talisker.js"
+    "talisker": "./talisker.js"
   },
   "dependencies": {
     "ramda": "^0.26.1",

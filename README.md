@@ -16,7 +16,7 @@ yarn add talisker         # using yarn
 ### Running 
 Just put `talisker.config.js` to root within your project and run `talisker`. Talisker will automatically load that configuration. In case you don't want this configuration to be placed here or it's name should be another, run talisker with `--config` or `-c` option with path to your config file:
 ```sh
-talisker --config path_to_your_config
+npx run talisker --config path_to_your_config
 ```
 path is always relative to your current working directory.
 
@@ -30,7 +30,7 @@ module.exports = {
   locations: [          // locations, it is explained below
     { match: /^\/graphql/, proxyPass: 'http://localhost:4000' },
     { match: /^\//, root: './dist/client', index: 'index.html' }
- ]
+  ]
 };
 ```
 
@@ -39,4 +39,3 @@ Locations are basically routes, if requested url matches the first occurrence (f
 Every location requires `match` parameter (regexp) and one of following parameters:
 - `proxyPass` - your request is proxied (headers are forwarded) to another server
 - `root` - serving files from this path (url is appended), you can also use `index` parameter to specify index file which is served when no specific file in your request is present
-
