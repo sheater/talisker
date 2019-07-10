@@ -26,16 +26,24 @@ If you want to use another port (80 is default) or port which is specified in yo
 Configuration file should look like this:
 ```js
 module.exports = {
-  port: 80,             // you can specify another port, 80 is default
-  locations: [          // locations, it is explained below
-    { match: /^\/graphql/, proxyPass: 'http://localhost:4000' },
-    { match: /^\//, root: './dist/client', index: 'index.html' }
-  ]
+	port: 8000,           // you can specify another port, 80 is default
+	locations: [          // locations, it is explained below
+		[/^\/graphql/, { proxyPass: 'http://localhost:4000' }],
+		[/^\/assets/, { root: '/dist/client' }],
+		[/^\/bundle.js/, { root: '/dist/client' }],
+		[/^\//, ({ url }) => ({ root: '/dist/client', tryFiles: [url, 'index.html'] })],
+	]
 };
 ```
 
 Locations are basically routes, if requested url matches the first occurrence (from top), this location is applied. Note that always first match is taken, others are skipped, so if your routes share same starting path, more general routes should be under more specific routes.
 
-Every location requires `match` parameter (regexp) and one of following parameters:
-- `proxyPass` - your request is proxied (headers are forwarded) to another server
-- `root` - serving files from this path (url is appended), you can also use `index` parameter to specify index file which is served when no specific file in your request is present
+Every location requires two parameters (regexp) and options object with parameters based on what you want:
+## Proxing
+If you need to reverse proxy your request, just add `proxyPass` parameter with destination you want to be proxied (headers are forwarded)
+
+## Serving static files
+For serving static files, you have to provide `root` parameter with path to your static files. That path is always relative to current working directory unless you specify `useAbsolutePath: true`, then it is absolute path within your system.
+Requested url is always appended. So if you have folders `assets` (like an example above) in your `dist/client`, and requested url looks like `/assets/image.png`, `dist/client/assets/image.png` is served.
+
+You can also specify function instead of options object. It can be handy when your configuration is somehow dependent on url.
